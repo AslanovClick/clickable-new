@@ -1,0 +1,57 @@
+head
+	meta(charset='utf-8')
+	meta(name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover')
+	title= META.title
+	meta(name='description' content=META.description)
+	meta(name='robots' content='index, follow, max-image-preview:large')
+	link(rel='canonical' href=PAGE_URL)
+	//- языковые версии
+	each l in LANG_ORDER
+		link(rel='alternate' hreflang=l href=SITE + LANGS[l].path)
+	link(rel='alternate' hreflang='x-default' href=SITE + LANGS.en.path)
+	meta(name='theme-color' content='#070707')
+	meta(name='color-scheme' content='dark')
+
+	//- Open Graph / соцсети
+	meta(property='og:type' content='website')
+	meta(property='og:site_name' content='CLICKABLE')
+	meta(property='og:locale' content=LANGS[LANG].locale)
+	each l in LANG_ORDER
+		if l !== LANG
+			meta(property='og:locale:alternate' content=LANGS[l].locale)
+	meta(property='og:url' content=PAGE_URL)
+	meta(property='og:title' content=META.title)
+	meta(property='og:description' content=META.description)
+	meta(property='og:image' content=META.image)
+	meta(property='og:image:width' content='1200')
+	meta(property='og:image:height' content='630')
+	meta(property='og:image:alt' content=META.imageAlt)
+	meta(name='twitter:card' content='summary_large_image')
+	meta(name='twitter:title' content=META.title)
+	meta(name='twitter:description' content=META.description)
+	meta(name='twitter:image' content=META.image)
+
+	//- иконки и манифест
+	link(rel='icon' href=ROOT + 'public/img/favicon.svg' type='image/svg+xml')
+	link(rel='icon' href=ROOT + 'public/img/icon-192.png' type='image/png' sizes='192x192')
+	link(rel='apple-touch-icon' href=ROOT + 'public/img/apple-touch-icon.png')
+	link(rel='manifest' href=ROOT + 'site.webmanifest')
+
+	if LANG === 'ru'
+		//- корень помнит выбранный язык: вернувшегося посетителя ведём на его версию (поисковиков это не касается)
+		script.
+			try { var l = localStorage.getItem('clickable-lang'); if (l === 'en' || l === 'uk') location.replace('./' + l + '/' + location.hash); } catch (e) {}
+	script.
+		document.documentElement.classList.add('js');
+		setTimeout(function () { if (!window.APP || !window.APP.booted) document.documentElement.classList.add('is-loaded'); }, 12000);
+	//- строки и данные для JS
+	script!= 'window.I18N=' + JSON.stringify(JS).split('<').join(String.fromCharCode(92) + 'u003c') + ';'
+	script(type='application/ld+json')!= JSON.stringify(LD).split('<').join(String.fromCharCode(92) + 'u003c')
+
+	//- фирменный шрифт нужен первому экрану — грузим сразу
+	link(rel='preload' as='font' type='font/woff2' href=ROOT + 'public/fonts/CLICKABLE-Black.woff2' crossorigin)
+	link(rel='preload' as='font' type='font/woff2' href=ROOT + 'public/fonts/Montserrat-Light.woff2' crossorigin)
+	link(rel='preconnect' href='https://fonts.googleapis.com')
+	link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
+	link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap')
+	link(rel='stylesheet' href=ROOT + 'public/css/style.min.css')

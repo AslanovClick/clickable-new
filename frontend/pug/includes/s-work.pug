@@ -1,0 +1,46 @@
+//- 3 (нечётная, прозрачная — фоном 3D-буква) — кейсы: табы-фильтр, масонри, просмотрщик
+section.sec.sec--clear.work#work(aria-labelledby='work-title' data-odd)
+	.container
+		.sec__head
+			div
+				p.label(data-scramble)
+					span.label__num [03]
+					= ' ' + T.work.label
+				h2.title#work-title(data-type)
+					= T.work.t1
+					br
+					span.accent= T.work.t2
+			.sec__aside
+				p.text(data-fade)= T.work.text
+
+		.tabs.work__tabs(role='tablist' aria-label=T.work.filterAria data-filter-tabs data-fade)
+			each f, i in FILTERS
+				- var n = f.id === 'all' ? CASES.length : CASES.filter(function (c) { return c.cats.indexOf(f.id) > -1; }).length
+				button.tabs__btn(type='button' role='tab' id='wf-' + f.id aria-selected=i === 0 ? 'true' : 'false' aria-controls='work-grid' tabindex=i === 0 ? '0' : '-1' data-filter=f.id)
+					span= f.name
+					sup.tabs__n= n < 10 ? '0' + n : n
+			span.tabs__ind(data-tabs-ind aria-hidden='true')
+
+		.work__grid#work-grid(role='tabpanel' aria-labelledby='wf-all' data-work-grid)
+			each c, i in CASES
+				article.case(class='case--' + c.shape data-case=i data-cats=c.cats.join(' ') data-card)
+					.case__media
+						img(src=c.img alt='' loading='lazy' decoding='async')
+						if c.video
+							video(muted loop playsinline preload='none' data-src=c.video)
+						if c.video || c.full
+							span.case__badge
+								+icon('play')
+								| Video
+					.case__meta
+						span.case__num= c.num
+						span.case__client= c.client
+						span.case__kind= c.kind
+					button.case__hit(type='button' data-case-open=i data-cursor=T.work.view)
+						span.sr-only= T.work.open + ': ' + c.client + ', ' + c.kind
+
+		.work__foot(data-fade)
+			p.work__note= T.work.note
+			a.link(href='#contact')
+				span= T.work.discuss
+				+icon('arrow')

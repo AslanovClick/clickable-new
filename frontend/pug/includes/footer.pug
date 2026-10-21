@@ -1,0 +1,26 @@
+footer.footer
+	.container
+		.footer__row
+			a.footer__link(href='mailto:' + CONTACTS.email data-fade)= CONTACTS.email
+			a.footer__link(href='tel:' + CONTACTS.phoneHref data-fade data-delay='.06')= CONTACTS.phone
+			nav.socials(aria-label=T.footer.social data-fade data-delay='.12')
+				each s in SOCIALS
+					a(href=s.href aria-label=s.name)
+						+social(s.id)
+			a.footer__top(href='#home' data-fade data-delay='.18')
+				span= T.footer.top
+				+icon('down')
+
+		//- огромный логотип: буквы загораются красным под курсором
+		p.footer__mark(aria-hidden='true' data-footer-mark)
+			each ch, i in 'CLICKABLE'.split('')
+				span(class=i === 5 ? 'is-a' : '')= ch
+
+		.footer__bottom
+			p
+				| ©&nbsp;
+				span(data-year)= YEAR
+				= ' CLICKABLE. ' + T.hero.tag
+			a.footer__ua(href='#')
+				| Support Ukraine
+				+icon('heart')

@@ -1,0 +1,35 @@
+- var SHARD_K = [1, .62, .34, .12, 0];
+
+//- 5 (нечётная, прозрачная) — процесс: пин, шаги едут горизонтально, буква собирается из осколков
+section.process#process(aria-labelledby='process-title' data-process data-odd)
+	.process__inner
+		.container.process__head
+			div
+				p.label(data-scramble)
+					span.label__num [05]
+					= ' ' + T.process.label
+				h2.title#process-title(data-type)
+					= T.process.t1
+					br
+					span.accent= T.process.t2
+			.process__meta
+				p.text(data-fade)= T.process.text
+				.process__progress(data-fade aria-hidden='true')
+					span.process__count
+						span(data-process-index) 01
+						|  / 0#{STEPS.length}
+					span.process__bar
+						span(data-process-bar)
+		.process__track(data-process-track)
+			each s, i in STEPS
+				article.step(data-step)
+					.step__top
+						span.step__num= '0' + (i + 1)
+						+shards(SHARD_K[i])
+					h3.step__title= s.title
+					p.step__text= s.text
+					dl.step__specs
+						each sp in s.specs
+							div
+								dt= sp[0]
+								dd= sp[1]

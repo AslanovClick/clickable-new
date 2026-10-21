@@ -1,0 +1,62 @@
+//- 8 (чётная, светлая) — о нас: «Не просто клик. Реакция.», цифры, отзыв, награды, FAQ-аккордеон
+section.sec.sec--light.about#about(aria-labelledby='about-title' data-rest)
+	.container
+		.about__top
+			h2.title.title--xl#about-title(data-type)
+				= T.about.t1
+				br
+				= T.about.t2
+				br
+				span.accent= T.about.t3
+			.about__intro
+				p.about__lead(data-fade)= T.about.lead
+				a.link(href='#contact' data-fade)
+					span= T.about.more
+					+icon('arrow')
+
+		figure.about__photo(data-about-photo)
+			img(src=IMG + 'about/team.webp' alt=T.about.photoAlt width='1400' height='1442' loading='lazy' decoding='async' data-about-img)
+			figcaption.about__cap
+				span.label__dot
+				= T.about.caption
+
+		.about__stats(role='list')
+			each s in STATS
+				.stat(role='listitem' data-card)
+					p.stat__v
+						span(data-count=s.v)= s.v
+					p.stat__k= s.k
+
+		.about__proof
+			blockquote.quote(data-fade)
+				span.quote__mark(aria-hidden='true') “
+				p.quote__text= QUOTE.text
+				footer.quote__who
+					span= QUOTE.who
+					strong= QUOTE.company
+			ul.awards(aria-label=T.about.awardsAria)
+				each a in AWARDS
+					li.award(data-card)
+						img(src=a.img alt=a.name loading='lazy' decoding='async')
+						span.award__t= a.title
+
+		.about__faq
+			.about__faq-head
+				p.label(data-scramble)
+					span.label__num [08]
+					|  FAQ
+				h3.title.title--sm(data-type)
+					= T.about.faq1
+					br
+					span.accent= T.about.faq2
+			.acc.acc--faq(data-acc)
+				each f, i in FAQ
+					.acc__item(data-acc-item data-card)
+						h4.acc__h
+							button.acc__btn(type='button' id='faq-btn-' + i aria-controls='faq-panel-' + i aria-expanded='false' data-acc-btn)
+								span.acc__title= f.q
+								span.acc__icon
+									+icon('plus')
+						.acc__panel(id='faq-panel-' + i role='region' aria-labelledby='faq-btn-' + i hidden data-acc-panel)
+							.acc__inner
+								p.acc__text= f.a

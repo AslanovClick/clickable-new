@@ -1,0 +1,72 @@
+//- 9 (нечётная, прозрачная) — контакты: интерактивный бриф; справа — 3D-буква в кольце
+section.sec.sec--clear.contact#contact(aria-labelledby='contact-title' data-odd data-rest)
+	.container.contact__grid
+		.contact__main
+			p.label(data-scramble)
+				span.label__num [09]
+				= ' ' + T.contact.label
+			h2.title.contact__title#contact-title(data-type)
+				= T.contact.t1
+				br
+				span.accent= T.contact.t2
+
+			form.brief(data-brief novalidate data-card)
+				fieldset.brief__group
+					legend.brief__legend
+						span 01
+						= T.contact.need
+					.brief__chips
+						each s, i in BRIEF.services
+							label.pick
+								input(type='checkbox' name='service' value=s data-brief-service=i)
+								span= s
+
+				.brief__row
+					fieldset.brief__group
+						legend.brief__legend
+							span 02
+							= T.contact.budget
+						.seg(data-seg)
+							each b, i in BRIEF.budgets
+								label.seg__opt
+									input(type='radio' name='budget' value=b checked=i === 1)
+									span= b
+							span.seg__ind(data-seg-ind aria-hidden='true')
+
+					.brief__group
+						label.brief__legend(for='brief-time')
+							span 03
+							= T.contact.time
+						.range
+							input#brief-time(type='range' name='months' min='1' max='6' step='1' value='2' data-brief-range aria-describedby='brief-time-out')
+							output.range__out#brief-time-out(for='brief-time' data-brief-range-out)= '2 ' + T.js.briefMonths
+
+				.brief__fields
+					.field
+						input#brief-name(type='text' name='name' placeholder=' ' autocomplete='name' required)
+						label(for='brief-name')= T.contact.name
+					.field
+						input#brief-contact(type='text' name='contact' placeholder=' ' autocomplete='email' required)
+						label(for='brief-contact')= T.contact.contact
+					.field.field--wide
+						textarea#brief-msg(name='message' rows='3' placeholder=' ')
+						label(for='brief-msg')= T.contact.message
+
+				.brief__bottom
+					p.brief__summary(data-brief-summary aria-live='polite')= '→ ' + T.js.briefEmpty
+					button.btn.btn--red(type='submit' data-magnetic)
+						span(data-brief-label)= T.contact.submit
+						+icon('send')
+				p.brief__status(role='status' aria-live='polite' data-brief-status)
+
+			//- контакты — под брифом: правая колонка отдана 3D-букве в кольце
+			ul.contact__list(aria-label=T.contact.listAria)
+				li(data-fade)
+					span.contact__k= T.contact.coop
+					a.contact__v(href='mailto:' + CONTACTS.email)= CONTACTS.email
+				li(data-fade)
+					span.contact__k= CONTACTS.messengers
+					a.contact__v(href='tel:' + CONTACTS.phoneHref)= CONTACTS.phone
+				li(data-fade)
+					span.contact__k= T.contact.career
+					a.contact__v(href='mailto:' + CONTACTS.hr)= CONTACTS.hr

@@ -1,0 +1,51 @@
+//- 6 (чётная, непрозрачная) — география: 3D-глобус, табы регионов, список стран, местное время
+section.sec.sec--dark.geo#geo(aria-labelledby='geo-title' data-geo)
+	.container.geo__grid
+		.geo__info
+			p.label(data-scramble)
+				span.label__num [06]
+				= ' ' + T.geo.label
+			h2.title#geo-title(data-type)
+				= T.geo.t1
+				br
+				span.accent= T.geo.t2
+			p.text(data-fade)= T.geo.text
+
+			.geo__stats(role='list')
+				each st in [['countries', PARTNERS.length], ['continents', REGIONS.length - 1], ['tz', TZ_COUNT]]
+					.geo__stat(role='listitem' data-card)
+						p.geo__v
+							span(data-count=st[1])= st[1]
+						p.geo__k= pl(st[1], st[0])
+
+			.tabs.geo__tabs(role='tablist' aria-label=T.geo.regionAria data-geo-tabs data-fade)
+				each r, i in REGIONS
+					button.tabs__btn(type='button' role='tab' aria-selected=i === 0 ? 'true' : 'false' aria-controls='geo-list' tabindex=i === 0 ? '0' : '-1' data-region=r.id)
+						span= r.name
+						sup.tabs__n= r.count
+				span.tabs__ind(data-tabs-ind aria-hidden='true')
+
+			ul.geo__list#geo-list(role='tabpanel' aria-label=T.geo.listAria data-geo-list data-fade)
+				each p in PARTNERS
+					li(data-region=p.region)
+						button.chip(type='button' data-country=p.id aria-pressed='false' class=p.hq ? 'chip--hq' : '')
+							if p.hq
+								span.chip__dot
+							= p.name
+
+			.geo__card(data-geo-card aria-live='polite' data-fade)
+				p.geo__card-k(data-geo-card-k)= T.js.hq
+				p.geo__card-name
+					span(data-geo-card-name)= HQ.name
+					span.geo__card-city(data-geo-card-city)= HQ.city
+				p.geo__card-time
+					+icon('clock')
+					span(data-geo-card-time) --:--
+					span.geo__card-tz(data-geo-card-tz)
+
+		.geo__globe(data-globe data-world=ROOT + 'public/js/world.js' data-cursor-drag)
+			canvas.geo__canvas(data-globe-canvas aria-hidden='true')
+			.geo__tip(data-geo-tip aria-hidden='true')
+			p.geo__hint(aria-hidden='true')
+				+icon('drag')
+				= T.geo.hint

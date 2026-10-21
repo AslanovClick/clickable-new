@@ -1,0 +1,33 @@
+//- Прелоадер: контур буквы A рисуется по прогрессу, потом A перелетает на своё место в слове CLICKABLE
+.preloader(data-preloader aria-hidden='true')
+	.preloader__ui(data-pre-ui)
+		.preloader__top
+			span.preloader__brand
+				+logo
+			span.preloader__meta Creative agency
+		p.preloader__right
+			| Brand · Video · 3D
+			br
+			| Web · Games
+		.preloader__log(data-pre-log)
+		p.preloader__count
+			span(data-pre-count) 000
+			small %
+		.preloader__bar
+			span(data-pre-bar)
+	svg.preloader__a(data-pre-a viewBox=A_BOX aria-hidden='true')
+		path.preloader__a-fill(d=A_PATH fill-rule='evenodd' data-pre-fill)
+		path.preloader__a-line(d=A_PATH fill-rule='evenodd' data-pre-line)
+
+//- Шторка для дальних переходов по меню: красная волна + чёрная панель с буквой A и названием секции;
+//- за ней страница мгновенно встаёт на нужное место — без пролистывания через весь сайт
+.jump(data-jump aria-hidden='true')
+	.jump__red(data-jump-red)
+	.jump__ink(data-jump-ink)
+		+glyphA('jump__a')
+		p.jump__label(data-jump-label)
+
+//- 3D-сцена с буквой A: фиксирована под контентом, видна сквозь прозрачные (нечётные) секции
+canvas.stage(data-stage aria-hidden='true')
+
+.noise(aria-hidden='true')

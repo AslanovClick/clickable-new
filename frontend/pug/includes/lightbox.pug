@@ -1,0 +1,19 @@
+//- Просмотрщик кейсов и шоурила (диалог)
+.lightbox(data-lightbox role='dialog' aria-modal='true' aria-labelledby='lb-title' hidden)
+	.lightbox__bg(data-lb-close)
+	.lightbox__frame
+		.lightbox__media(data-lb-media)
+		.lightbox__info
+			p.lightbox__num
+				span(data-lb-num) 01
+				span.lightbox__of(data-lb-of)
+			h2.lightbox__title#lb-title(data-lb-title) CLICKABLE
+			p.lightbox__kind(data-lb-kind)
+			p.lightbox__text(data-lb-text)
+			.lightbox__nav(data-lb-nav)
+				button.slider__btn(type='button' data-lb-prev aria-label=T.lightbox.prev)
+					+icon('prev')
+				button.slider__btn(type='button' data-lb-next aria-label=T.lightbox.next)
+					+icon('arrow')
+	button.lightbox__close(type='button' data-lb-close aria-label=T.lightbox.close)
+		+icon('close')

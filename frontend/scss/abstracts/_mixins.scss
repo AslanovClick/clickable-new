@@ -1,0 +1,115 @@
+@use "sass:list";
+@use 'functions' as *;
+
+
+// tablet: <= 1024, mobile: <= 767
+@mixin mq($bp) {
+  @if $bp == tablet {
+    @media (max-width: 1024px) { @content; }
+  } @else if $bp == mobile {
+    @media (max-width: 767px) { @content; }
+  } @else if $bp == desktop {
+    @media (min-width: 1025px) { @content; }
+  }
+}
+
+// тёмное стекло поверх 3D-сцены
+@mixin glass($a: .55) {
+  background: linear-gradient(180deg, rgba(22, 20, 20, $a), rgba(10, 9, 9, $a + .1));
+  border: 1px solid rgba(255, 255, 255, .09);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  backdrop-filter: blur(16px) saturate(120%);
+
+  // на телефонах размытие поверх WebGL дорогое — вместо него просто плотнее фон
+  @media (hover: none) {
+    background: linear-gradient(180deg, rgba(22, 20, 20, .9), rgba(10, 9, 9, .94));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+// подсветка и рамка, которые тянутся за курсором (--mx/--my ставит JS)
+@mixin spotlight($c1: rgba(255, 25, 35, .16), $c2: rgba(255, 90, 90, .9)) {
+  isolation: isolate;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .6s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  &::before {
+    z-index: -1;
+    background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 0%), $c1, transparent 65%);
+  }
+
+  &::after {
+    padding: 1px;
+    background: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 0%), $c2, rgba(255, 255, 255, .2) 40%, transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+
+  @media (hover: hover) {
+    &:hover::before,
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin pseudo() {
+  content: '';
+  display: block;
+  position: absolute;
+}
+
+@mixin input-placeholder {
+  &::-webkit-input-placeholder { @content; }
+  &:-moz-placeholder { @content; }
+  &::-moz-placeholder { @content; }
+  &:-ms-input-placeholder { @content; }
+}
+
+@mixin pointer {
+  &[disabled] {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @media (pointer: fine) {
+    &:not([disabled]):hover {
+      @content;
+      cursor: pointer;
+    }
+  }
+
+  &:not([disabled]):active {
+    @content;
+  }
+}
+
+@mixin transition($time, $properties...) {
+  $transition: ();
+
+  @each $property in $properties {
+    $transition: list.append($transition, ($property $time ease-in-out), $separator: comma);
+  }
+
+  transition: $transition;
+}
+
+// моноширинная подпись в стиле референса: разрядка, капс
+@mixin mono($size: 12) {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  font-size: rem($size);
+  font-weight: 400;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
