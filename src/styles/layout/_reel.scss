@@ -1,0 +1,153 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.reel {
+  position: relative;
+  z-index: 1;
+  padding-top: rem(24);
+  background: #050505;
+
+  // рамка раскрывается от «окна» до полного экрана (clip-path ведёт JS)
+  &__box {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    min-height: rem(560);
+    overflow: hidden;
+    background: #000;
+  }
+
+  &__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.12);
+    will-change: transform;
+  }
+
+  &__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(0deg, rgba(5, 5, 5, .88) 0%, rgba(5, 5, 5, .2) 50%, rgba(5, 5, 5, .45) 100%),
+      linear-gradient(90deg, rgba(5, 5, 5, .55), transparent 60%);
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    height: 100%;
+    padding-bottom: rem(80);
+
+    .title {
+      margin-top: rem(24);
+    }
+  }
+
+  &__play {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(20);
+    margin-top: rem(40);
+    @include mono(12);
+    color: #fff;
+  }
+
+  &__play-ring {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: rem(96);
+    height: rem(96);
+    border-radius: 50%;
+    background: $red;
+    transition: transform .6s $ease-out;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid $red;
+      animation: ring-pulse 2.4s $ease-out infinite;
+    }
+
+    .icon {
+      width: rem(30);
+      height: rem(30);
+      margin-left: rem(4);
+    }
+  }
+
+  &__play:hover &__play-ring {
+    transform: scale(1.08);
+  }
+
+  // бегущая строка направлений
+  &__ticker {
+    overflow: hidden;
+    padding: rem(26) 0;
+    border-bottom: 1px solid $line;
+  }
+
+  &__ticker-track {
+    display: flex;
+    align-items: center;
+    gap: rem(40);
+    width: max-content;
+    animation: ticker 36s linear infinite;
+
+    span {
+      font-family: $font-brand;
+      font-size: rem(64);
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(242, 239, 234, .4);
+
+      // период 4 делит набор из 8 слов — шов не виден
+      &:nth-of-type(4n + 1) {
+        color: $text;
+        -webkit-text-stroke-color: transparent;
+      }
+    }
+
+    i {
+      flex: none;
+      width: rem(14);
+      height: rem(14);
+      background: $red;
+      transform: rotate(45deg);
+    }
+  }
+
+  // на вертикальном экране горизонтальное видео — узкая полоса; рамку делаем ниже
+  @include mq(mobile) {
+    &__box {
+      height: 78svh;
+      min-height: 480px;
+    }
+  }
+
+  @include mq(tablet) {
+    &__content { padding-bottom: 48px; }
+    &__play-ring { width: 72px; height: 72px; }
+    &__ticker-track span { font-size: 40px; }
+  }
+}
+
+@keyframes ring-pulse {
+  0% { transform: scale(1); opacity: .9; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+@keyframes ticker {
+  to { transform: translateX(-50%); }
+}

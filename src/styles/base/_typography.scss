@@ -1,0 +1,149 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+// моноширинная подпись с разрядкой: ■ ИЗБРАННЫЕ РАБОТЫ
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: rem(12);
+  @include mono(12);
+  letter-spacing: .32em;
+  color: rgba(242, 239, 234, .78);
+
+  &__dot {
+    flex: none;
+    width: rem(7);
+    height: rem(7);
+    background: $red;
+    box-shadow: 0 0 rem(12) rgba($red, .8);
+    animation: dot-pulse 2.6s ease-in-out infinite;
+  }
+
+  &__num {
+    color: $red;
+  }
+
+  @include mq(tablet) {
+    font-size: 11px;
+    letter-spacing: .24em;
+  }
+}
+
+// большой заголовок: тонкий Montserrat + акцент фирменным шрифтом (как NOT JUST SEEN. FELT.)
+.title {
+  font-family: $font-body;
+  font-size: rem(64);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -.015em;
+  text-transform: uppercase;
+
+  &--xl {
+    font-size: rem(92);
+    line-height: .96;
+  }
+
+  &--sm {
+    font-size: rem(40);
+  }
+
+  @include mq(tablet) {
+    font-size: 44px;
+
+    &--xl { font-size: 56px; }
+    &--sm { font-size: 30px; }
+  }
+  @include mq(mobile) {
+    font-size: 32px;
+
+    &--xl { font-size: 40px; }
+    &--sm { font-size: 25px; }
+
+    // фирменный шрифт шире Montserrat — длинные слова (ЗАПАМ’ЯТОВУЮТЬ) не должны упираться в край
+    .accent { font-size: .9em; }
+  }
+}
+
+// фирменный акцент: CLICKABLE, красный
+.accent {
+  font-family: $font-brand;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: $red;
+}
+
+.brand-font {
+  font-family: $font-brand;
+  font-weight: 400;
+}
+
+.text {
+  font-size: rem(17);
+  line-height: 1.6;
+  color: $muted;
+
+  @include mq(tablet) {
+    font-size: 16px;
+  }
+}
+
+// разбитый на буквы текст
+[data-typed] {
+  position: relative;
+}
+
+.word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.char {
+  display: inline-block;
+
+  &.is-locked {
+    text-align: center;
+  }
+}
+
+.caret {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: .07em;
+  height: .9em;
+  min-width: 2px;
+  background: $red;
+  box-shadow: 0 0 rem(12) rgba($red, .9);
+  pointer-events: none;
+  opacity: 0;
+
+  &.is-blink {
+    animation: caret-blink 1s steps(1) infinite;
+  }
+}
+
+// пока JS не подготовил текст — прячем то, что будет анимироваться
+// (.is-ready — JS всё подготовил, .is-loaded — аварийный фолбэк из head)
+.js:not(.is-ready):not(.is-loaded) {
+  [data-hero-mark],
+  [data-hero-tag],
+  [data-hero-foot],
+  [data-type],
+  [data-scramble],
+  [data-fade],
+  [data-card],
+  [data-panel] {
+    visibility: hidden;
+  }
+}
+
+@keyframes caret-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.75); }
+}

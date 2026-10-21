@@ -1,0 +1,151 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  overflow: hidden;
+  background: $bg;
+
+  .js & {
+    display: block;
+  }
+
+  .is-loaded & {
+    display: none;
+  }
+
+  &__ui {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    @include mono(10.5);
+    color: rgba(242, 239, 234, .55);
+  }
+
+  &__top {
+    position: absolute;
+    left: rem(40);
+    top: rem(34);
+    display: flex;
+    align-items: center;
+    gap: rem(18);
+  }
+
+  &__brand {
+    display: block;
+    width: rem(120);
+    color: $red;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__meta {
+    padding-left: rem(18);
+    border-left: 1px solid rgba(255, 255, 255, .16);
+  }
+
+  &__right {
+    position: absolute;
+    right: rem(40);
+    top: rem(34);
+    line-height: 1.9;
+    text-align: right;
+  }
+
+  &__log {
+    position: absolute;
+    left: rem(40);
+    bottom: rem(46);
+    display: grid;
+    gap: rem(7);
+    text-transform: none;
+    letter-spacing: .06em;
+    color: rgba(242, 239, 234, .4);
+
+    div:last-child {
+      color: #fff;
+    }
+  }
+
+  &__count {
+    position: absolute;
+    right: rem(40);
+    bottom: rem(34);
+    font-family: $font-brand;
+    font-size: rem(96);
+    line-height: .8;
+    letter-spacing: 0;
+    color: $text;
+    font-variant-numeric: tabular-nums;
+
+    small {
+      margin-left: rem(6);
+      @include mono(14);
+      vertical-align: top;
+      color: $red;
+    }
+  }
+
+  &__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, .06);
+
+    span {
+      position: absolute;
+      inset: 0;
+      background: $red;
+      box-shadow: 0 0 12px rgba($red, .9);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+    }
+  }
+
+  // контур буквы A — рисуется по прогрессу, потом заливается и перелетает в слово
+  &__a {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: rem(200);
+    height: auto;
+    overflow: visible;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+
+  &__a-line {
+    fill: none;
+    stroke: $red;
+    stroke-width: 1.5px;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 6px rgba($red, .8));
+  }
+
+  &__a-fill {
+    fill: $red;
+    opacity: 0;
+  }
+
+  @include mq(tablet) {
+    &__top { left: 24px; top: 24px; }
+    &__right { right: 24px; top: 24px; }
+    &__log { left: 24px; bottom: 36px; }
+    &__count { right: 24px; bottom: 26px; font-size: 64px; }
+  }
+
+  @include mq(mobile) {
+    &__meta, &__right { display: none; }
+    &__log { bottom: 100px; }
+  }
+}

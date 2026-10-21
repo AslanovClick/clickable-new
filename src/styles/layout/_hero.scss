@@ -1,0 +1,273 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+// «Глава»: высокая секция + липкая сцена. Длина скролла = высота минус экран
+.hero {
+  position: relative;
+  z-index: 1;
+  height: 340vh;
+
+  @include mq(mobile) {
+    height: 300vh;
+  }
+
+  // svh — видимая высота при показанной адресной строке: низ сцены не уезжает под неё на телефонах
+  &__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  &__panel {
+    position: absolute;
+    inset: 0;
+    will-change: transform, opacity;
+
+    > .container {
+      position: relative;
+      height: 100%;
+    }
+  }
+
+  // без transform: по offset-координатам JS ставит 3D-букву ровно на место глифа
+  &__panel--intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__center {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -5vh;
+  }
+
+  // слово CLICKABLE на всю ширину (5.71em в шрифте)
+  &__mark {
+    font-family: $font-brand;
+    font-size: min(15.4vw, 34vh);
+    font-weight: 400;
+    line-height: .86;
+    letter-spacing: -.005em;
+    white-space: nowrap;
+    color: $text;
+    user-select: none;
+  }
+
+  &__ch {
+    display: inline-block;
+    will-change: transform, opacity;
+
+    // на месте A — 3D-буква; без WebGL видна сама буква
+    &--a {
+      color: transparent;
+
+      .no-webgl & {
+        color: $red;
+      }
+    }
+  }
+
+  // нулевой элемент на базовой линии — по нему 3D-буква встаёт ровно на строку
+  &__base {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: baseline;
+  }
+
+  &__tag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem(22);
+    margin-top: min(6vh, #{rem(54)});
+    @include mono(13);
+    letter-spacing: .62em;
+    margin-right: -.62em;
+    color: rgba(242, 239, 234, .85);
+
+    .icon {
+      width: rem(22);
+      height: rem(22);
+      margin-right: .62em;
+      color: $red;
+      animation: hero-bob 2.4s $ease-in-out infinite;
+    }
+  }
+
+  &__panel > &__foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: rem(34);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: rem(30);
+    height: auto;
+    @include mono(11);
+    color: rgba(242, 239, 234, .6);
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+    color: #fff;
+  }
+
+  &__list {
+    display: flex;
+    gap: rem(10);
+
+    li + li::before {
+      content: '/';
+      margin-right: rem(10);
+      color: $red;
+    }
+  }
+
+  &__copy {
+    justify-self: end;
+
+    span {
+      color: $red;
+    }
+  }
+
+  @include mq(tablet) {
+    &__panel > &__foot {
+      grid-template-columns: 1fr 1fr;
+      bottom: 24px;
+    }
+
+    &__list {
+      display: none;
+    }
+  }
+
+  @include mq(mobile) {
+    &__center { margin-top: -8vh; }
+
+    // слово — почти на всю ширину экрана (5.71em)
+    &__mark { font-size: 16.2vw; }
+
+    &__tag {
+      font-size: 10px;
+      letter-spacing: .34em;
+      margin-right: -.34em;
+      text-align: center;
+
+      .icon { margin-right: .34em; }
+    }
+
+    &__panel > &__foot {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      font-size: 10px;
+    }
+
+    &__copy {
+      justify-self: start;
+    }
+  }
+}
+
+// ---------- манифест: слова загораются по скроллу ----------
+.manifesto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  &__text {
+    max-width: rem(1120);
+    margin-top: rem(30);
+    font-family: $font-body;
+    font-size: rem(44);
+    font-weight: 300;
+    line-height: 1.22;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    text-shadow: 0 0 rem(30) rgba(7, 7, 7, .8);
+
+    .w {
+      display: inline-block;
+      opacity: .14;
+    }
+
+    // ключевые слова — фирменным шрифтом
+    .w--acc {
+      font-family: $font-brand;
+      color: $red;
+      letter-spacing: 0;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: rem(14) rem(40);
+    margin-top: rem(44);
+    @include mono(11.5);
+
+    li {
+      display: flex;
+      gap: rem(10);
+    }
+
+    span {
+      color: rgba(255, 255, 255, .5);
+    }
+
+    strong {
+      font-weight: 500;
+      color: #fff;
+    }
+  }
+
+  @include mq(tablet) {
+    &__text { font-size: 30px; }
+  }
+
+  @include mq(mobile) {
+    &__text { font-size: 22px; margin-top: 20px; }
+    &__meta { font-size: 10.5px; gap: 10px 20px; margin-top: 28px; }
+  }
+}
+
+@keyframes hero-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+// ---------- без JavaScript ----------
+html:not(.js) {
+  .hero {
+    height: auto;
+  }
+
+  .hero__stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .hero__panel {
+    position: relative;
+    min-height: 100vh;
+  }
+
+  .hero__ch--a {
+    color: $red;
+  }
+}

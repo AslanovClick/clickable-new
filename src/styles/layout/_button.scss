@@ -1,0 +1,267 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(12);
+  height: rem(54);
+  padding: 0 rem(28);
+  border-radius: rem(4);
+  @include mono(12);
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-decoration: none;
+  white-space: nowrap;
+  color: #fff;
+  isolation: isolate;
+  overflow: hidden;
+  transition: box-shadow .5s $ease-out, border-color .4s, background-color .4s, color .4s;
+
+  .icon {
+    width: rem(17);
+    height: rem(17);
+    flex: none;
+    transition: transform .5s $ease-out;
+  }
+
+  // блик, пробегающий по кнопке
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -60%;
+    width: 50%;
+    z-index: -1;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .32), transparent);
+    transform: skewX(-20deg) translateX(0);
+    transition: transform .9s $ease-out;
+    pointer-events: none;
+  }
+
+  @include pointer {
+    .icon {
+      transform: translateX(rem(4));
+    }
+    &::after {
+      transform: skewX(-20deg) translateX(420%);
+    }
+  }
+
+  &--red {
+    background: $red;
+    box-shadow: 0 rem(10) rem(30) rgba($red, .3);
+
+    @include pointer {
+      box-shadow: 0 rem(14) rem(44) rgba($red, .55);
+    }
+  }
+
+  &--ghost {
+    border: 1px solid rgba(255, 255, 255, .22);
+    background-color: rgba(255, 255, 255, .02);
+
+    @include pointer {
+      border-color: $red;
+      background-color: rgba($red, .12);
+    }
+  }
+
+  @include mq(tablet) {
+    height: 50px;
+    padding: 0 22px;
+    font-size: 12px;
+    gap: 10px;
+
+    .icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// текстовая ссылка со стрелкой и линией
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: rem(14);
+  padding: rem(6) 0;
+  @include mono(12);
+  text-decoration: none;
+  color: inherit;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: rem(30);
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    opacity: .35;
+    transform-origin: 0 50%;
+    transition: transform .7s $ease-out, opacity .4s, background-color .4s;
+  }
+
+  .icon {
+    width: rem(22);
+    height: rem(22);
+    transition: transform .6s $ease-out;
+  }
+
+  @include pointer {
+    color: $red;
+
+    &::after {
+      opacity: 1;
+      background-color: $red;
+    }
+
+    .icon {
+      transform: translateX(rem(6));
+    }
+  }
+}
+
+// табы с «бегущей» плашкой (JS двигает .tabs__ind)
+.tabs {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: rem(4);
+  padding: rem(5);
+  border: 1px solid $line;
+  border-radius: rem(40);
+  background: rgba(13, 13, 13, .6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  &__btn {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: rem(6);
+    padding: rem(11) rem(18);
+    border-radius: rem(40);
+    @include mono(11.5);
+    letter-spacing: .14em;
+    color: rgba(242, 239, 234, .62);
+    transition: color .4s;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &[aria-selected='true'] {
+      color: #fff;
+
+      .tabs__n {
+        color: rgba(255, 255, 255, .8);
+      }
+    }
+  }
+
+  &__n {
+    top: 0;
+    font-size: .78em;
+    color: $red;
+    transition: color .4s;
+  }
+
+  &__ind {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    width: 0;
+    height: 0;
+    border-radius: rem(40);
+    background: $red;
+    box-shadow: 0 rem(6) rem(20) rgba($red, .35);
+    pointer-events: none;
+  }
+
+  // без JS плашки нет — выбранный таб подсвечен сам
+  html:not(.js) & &__btn[aria-selected='true'] {
+    background: $red;
+  }
+
+  // на телефоне табы переносятся на несколько строк — общая «пилюля» ломается о скругления,
+  // поэтому каждый таб становится отдельным чипом, выбранный — красный
+  @include mq(mobile) {
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+
+    &__btn {
+      padding: 9px 13px;
+      border: 1px solid $line;
+      border-radius: 40px;
+      font-size: 10.5px;
+      letter-spacing: .1em;
+      transition: color .4s, background-color .4s, border-color .4s;
+
+      &[aria-selected='true'] {
+        border-color: $red;
+        background: $red;
+      }
+    }
+
+    &__ind {
+      display: none;
+    }
+  }
+}
+
+// чип (кнопка-тег)
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: rem(8);
+  padding: rem(8) rem(14);
+  border: 1px solid $line;
+  border-radius: rem(40);
+  @include mono(11);
+  letter-spacing: .1em;
+  color: rgba(242, 239, 234, .7);
+  transition: border-color .35s, color .35s, background-color .35s;
+
+  &:hover {
+    border-color: rgba($red, .7);
+    color: #fff;
+  }
+
+  &[aria-pressed='true'] {
+    border-color: $red;
+    background: $red;
+    color: #fff;
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    background: $red;
+    box-shadow: 0 0 8px $red;
+  }
+
+  &[aria-pressed='true'] &__dot {
+    background: #fff;
+  }
+
+  @include mq(mobile) {
+    padding: 7px 11px;
+    font-size: 10px;
+    letter-spacing: .06em;
+  }
+}

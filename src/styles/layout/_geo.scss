@@ -1,0 +1,211 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.geo {
+  overflow: hidden;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, rem(540)) minmax(0, 1fr);
+    gap: rem(40);
+    align-items: center;
+  }
+
+  &__info {
+    position: relative;
+    z-index: 1;
+
+    .title {
+      margin: rem(26) 0 rem(24);
+    }
+
+    .text {
+      max-width: rem(460);
+    }
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: rem(12);
+    margin: rem(36) 0 rem(36);
+  }
+
+  &__stat {
+    padding: rem(16) 0 0;
+    border-top: 1px solid $line;
+  }
+
+  &__v {
+    font-family: $font-brand;
+    font-size: rem(52);
+    line-height: .9;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__k {
+    margin-top: rem(10);
+    @include mono(10.5);
+    color: $muted;
+  }
+
+  &__tabs {
+    margin-bottom: rem(18);
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(7);
+    min-height: rem(120);
+
+    li[hidden] {
+      display: none;
+    }
+  }
+
+  &__card {
+    position: relative;
+    margin-top: rem(26);
+    padding: rem(20) rem(24);
+    border: 1px solid $line;
+    border-left: 2px solid $red;
+    background: linear-gradient(90deg, rgba($red, .12), rgba($red, 0) 70%);
+  }
+
+  &__card-k {
+    @include mono(10.5);
+    color: $red;
+  }
+
+  &__card-name {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: rem(14);
+    margin-top: rem(10);
+
+    > span:first-child {
+      font-family: $font-brand;
+      font-size: rem(34);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+  }
+
+  &__card-city {
+    @include mono(12);
+    color: $muted;
+  }
+
+  &__card-time {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    margin-top: rem(14);
+    @include mono(13);
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+
+    .icon {
+      width: rem(16);
+      height: rem(16);
+      color: $red;
+    }
+  }
+
+  &__card-tz {
+    color: $muted;
+  }
+
+  // глобус
+  &__globe {
+    position: relative;
+    width: 100%;
+    max-width: 92vh;
+    aspect-ratio: 1;
+    justify-self: center;
+  }
+
+  &__canvas {
+    position: absolute;
+    inset: -6%;
+    width: 112%;
+    height: 112%;
+    display: block;
+    touch-action: pan-y;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    padding: rem(8) rem(12);
+    border: 1px solid rgba($red, .7);
+    border-radius: rem(4);
+    background: rgba(13, 13, 13, .9);
+    @include mono(10.5);
+    white-space: nowrap;
+    color: #fff;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s;
+
+    &.is-on {
+      opacity: 1;
+    }
+
+    small {
+      display: block;
+      margin-top: 3px;
+      color: $muted;
+      font-size: .92em;
+    }
+  }
+
+  &__hint {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    transform: translateX(-50%);
+    @include mono(10);
+    white-space: nowrap;
+    color: rgba(242, 239, 234, .5);
+
+    .icon {
+      width: rem(16);
+      height: rem(16);
+      color: $red;
+    }
+  }
+
+  @include mq(tablet) {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__globe {
+      order: -1;
+      max-width: 600px;
+    }
+  }
+
+  // без WebGL глобуса нет — остаются табы, страны и карточка
+  .no-webgl &__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .no-webgl &__globe {
+    display: none;
+  }
+}

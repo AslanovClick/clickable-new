@@ -1,0 +1,184 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+* {
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+
+	&:focus {
+		outline: none;
+	}
+}
+
+:focus-visible {
+  outline: 2px solid $red;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+:root {
+  // десктоп-макет 1440×810: rem(px) тянется от ширины, но и от высоты экрана —
+  // чтобы полноэкранные (прилипающие) секции влезали на широких невысоких экранах
+  font-size: clamp(12px, min(#{vp(1440)}, 1.975vh), 22px);
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+  @media (max-width: 374px) {
+    font-size: vp(375);
+  }
+}
+
+html {
+  background: $bg;
+  color-scheme: dark;
+}
+
+// Lenis
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: $font-body;
+  font-size: rem(16);
+  line-height: 1.5;
+  color: $text;
+  background: $bg;
+}
+
+h1, h2, h3, h4, h5, p, ul, ol, dl, dd, figure, blockquote {
+  margin: 0;
+}
+
+ul, ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: rgba($red, .85);
+  color: #fff;
+}
+
+.body-wrap {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.container {
+  width: 100%;
+  max-width: rem(1360);
+  margin: 0 auto;
+  padding: 0 rem(40);
+
+  @include mq(tablet) {
+    padding: 0 24px;
+  }
+  @include mq(mobile) {
+    padding: 0 18px;
+  }
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ссылка «к контенту» для клавиатуры: видна только в фокусе
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  z-index: 200;
+  padding: 12px 18px;
+  border-radius: 6px;
+  background: #fff;
+  color: $ink;
+  font-family: $font-mono;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform .3s;
+
+  &:focus,
+  &:focus-visible {
+    transform: none;
+    outline: 2px solid $red;
+    outline-offset: 3px;
+  }
+}
+
+main:focus {
+  outline: none;
+}
+
+// уважаем системную настройку «уменьшить движение»
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}

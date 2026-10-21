@@ -1,0 +1,163 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.footer {
+  position: relative;
+  z-index: 3;
+  padding: rem(50) 0 rem(30);
+  overflow: hidden;
+  background: $ink;
+
+  // строка контактов, как в референсе
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(24) rem(40);
+    padding-bottom: rem(40);
+    border-bottom: 1px solid $line;
+  }
+
+  &__link {
+    @include mono(13);
+    letter-spacing: .14em;
+    text-decoration: none;
+    transition: color .4s;
+
+    &:hover {
+      color: $red;
+    }
+  }
+
+  &__top {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(10);
+    @include mono(11);
+    text-decoration: none;
+    color: $muted;
+    transition: color .4s;
+
+    .icon {
+      width: rem(16);
+      height: rem(16);
+      transform: rotate(180deg);
+    }
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  // огромный логотип-обводка: буква загорается под курсором
+  &__mark {
+    display: flex;
+    justify-content: space-between;
+    margin: rem(50) 0 rem(36);
+    font-family: $font-brand;
+    font-size: 14.6vw;
+    line-height: .82;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(242, 239, 234, .2);
+    user-select: none;
+
+    span {
+      display: inline-block;
+      transition: color .6s, -webkit-text-stroke-color .6s, transform .8s $ease-out;
+
+      &:hover,
+      &.is-lit {
+        color: $red;
+        -webkit-text-stroke-color: $red;
+        transform: translateY(-4%);
+      }
+
+      // та самая A — всегда красная
+      &.is-a {
+        color: $red;
+        -webkit-text-stroke-color: $red;
+      }
+    }
+
+    @include mq(desktop) {
+      font-size: min(14.6vw, #{rem(240)});
+    }
+  }
+
+  // на телефоне: почта и телефон — колонкой, соцсети и «наверх» — одной строкой
+  @include mq(mobile) {
+    &__row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px 20px;
+    }
+
+    &__row > .footer__link {
+      grid-column: 1 / -1;
+    }
+
+    &__mark {
+      margin: 36px 0 24px;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: rem(12) rem(30);
+    @include mono(11);
+    letter-spacing: .1em;
+    color: rgba(242, 239, 234, .55);
+  }
+
+  &__ua {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(8);
+    text-decoration: none;
+    color: #fff;
+
+    .icon {
+      width: rem(15);
+      height: rem(15);
+      color: $red;
+      fill: $red;
+    }
+  }
+}
+
+.socials {
+  display: flex;
+  gap: rem(10);
+
+  a {
+    display: grid;
+    place-items: center;
+    width: rem(42);
+    height: rem(42);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .14);
+    color: #fff;
+    transition: background-color .4s, border-color .4s, transform .5s $ease-out;
+
+    &:hover {
+      border-color: $red;
+      background: $red;
+      transform: translateY(-3px);
+    }
+  }
+
+  .icon {
+    width: rem(16);
+    height: rem(16);
+  }
+
+  @include mq(tablet) {
+    a { width: 42px; height: 42px; }
+    .icon { width: 16px; height: 16px; }
+  }
+}

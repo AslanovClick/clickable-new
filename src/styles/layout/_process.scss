@@ -1,0 +1,223 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+// Пин + горизонтальная лента шагов
+.process {
+  --edge: calc((100vw - min(100vw, #{rem(1360)})) / 2 + #{rem(40)});
+  position: relative;
+  z-index: 1;
+
+  &__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    height: 100svh;
+    padding: rem(96) 0 rem(36);
+    overflow: hidden;
+  }
+
+  &__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: rem(40);
+    margin-bottom: rem(44);
+
+    .label {
+      margin-bottom: rem(22);
+    }
+  }
+
+  &__meta {
+    max-width: rem(400);
+
+    .text {
+      font-size: rem(15.5);
+    }
+  }
+
+  &__progress {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    margin-top: rem(22);
+  }
+
+  &__count {
+    @include mono(12);
+    color: rgba(255, 255, 255, .6);
+    font-variant-numeric: tabular-nums;
+
+    span {
+      color: #fff;
+    }
+  }
+
+  &__bar {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, .14);
+
+    span {
+      position: absolute;
+      inset: 0;
+      background: $red;
+      box-shadow: 0 0 8px rgba($red, .8);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+    }
+  }
+
+  &__track {
+    display: flex;
+    gap: rem(18);
+    width: max-content;
+    padding: 0 var(--edge);
+    will-change: transform;
+  }
+
+  @include mq(tablet) {
+    --edge: 24px;
+
+    &__inner { padding: 80px 0 28px; }
+
+    &__head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    &__meta .text { font-size: 14.5px; }
+    &__track { gap: 14px; }
+  }
+
+  @include mq(mobile) {
+    --edge: 18px;
+
+    &__meta .text { display: none; }
+  }
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: rem(400);
+  min-height: min(#{rem(440)}, 56vh);
+  padding: rem(28);
+  border-radius: rem(8);
+  @include glass(.6);
+  @include spotlight;
+
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: auto;
+    padding-bottom: rem(30);
+  }
+
+  &__num {
+    font-family: $font-brand;
+    font-size: rem(64);
+    line-height: .9;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(242, 239, 234, .5);
+  }
+
+  &__title {
+    font-family: $font-brand;
+    font-size: rem(26);
+    font-weight: 400;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  &__text {
+    margin-top: rem(12);
+    font-size: rem(14.5);
+    line-height: 1.55;
+    color: $muted;
+  }
+
+  &__specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: rem(14);
+    margin: rem(22) 0 0;
+    padding-top: rem(16);
+    border-top: 1px dashed rgba(255, 255, 255, .14);
+
+    dt {
+      @include mono(10);
+      color: $muted;
+    }
+
+    dd {
+      margin: rem(6) 0 0;
+      font-size: rem(14);
+      color: #fff;
+    }
+  }
+
+  @include mq(tablet) {
+    width: min(380px, 80vw);
+    padding: 22px;
+
+    &__num { font-size: 48px; }
+    &__title { font-size: 20px; }
+    &__text { font-size: 14px; }
+  }
+}
+
+// буква A из осколков: при наведении на шаг осколки встают на место
+.shards {
+  width: rem(140);
+  height: auto;
+  overflow: visible;
+
+  &__p {
+    fill: rgba($red, .07);
+    stroke: rgba(242, 239, 234, .7);
+    stroke-width: 1.2px;
+    vector-effect: non-scaling-stroke;
+    transform: translate(var(--tx), var(--ty)) rotate(var(--r));
+    transition: transform 1.1s $ease-out, fill .6s, stroke .6s;
+  }
+
+  &.is-whole &__p {
+    fill: $red;
+    stroke: $red;
+  }
+
+  &.is-whole {
+    filter: drop-shadow(0 0 rem(16) rgba($red, .55));
+  }
+
+  .step:hover &__p,
+  .step:focus-within &__p {
+    transform: none;
+    stroke: $red;
+  }
+
+  @include mq(tablet) {
+    width: 104px;
+  }
+}
+
+html:not(.js) {
+  .process__inner {
+    height: auto;
+  }
+
+  .process__track {
+    flex-wrap: wrap;
+    width: auto;
+  }
+}

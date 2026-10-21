@@ -1,0 +1,254 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+// две ленты логотипов в противоходе; плоскость слегка «лежит» в пространстве
+.marquee {
+  display: grid;
+  gap: rem(14);
+  margin: rem(-20) 0 rem(-40);
+  padding: rem(50) 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  transform: perspective(1400px) rotateX(10deg);
+
+  &__track {
+    display: flex;
+    gap: rem(14);
+    width: max-content;
+    margin: 0;
+    padding: 0;
+    will-change: transform;
+  }
+}
+
+// логотип клиента: монохром → в цвете при наведении
+.client {
+  --rx: 0deg;
+  --ry: 0deg;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: rem(250);
+  height: rem(112);
+  border: 1px solid $line;
+  border-radius: rem(8);
+  background: rgba(13, 13, 13, .7);
+  transform: perspective(700px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform .7s $ease-out, border-color .5s, background-color .5s;
+
+  img {
+    max-width: 60%;
+    max-height: 44%;
+    filter: brightness(0) invert(1);
+    opacity: .5;
+    transition: filter .6s, opacity .6s, transform .7s $ease-out;
+  }
+
+  &--raw img {
+    filter: grayscale(1) brightness(1.5) contrast(1.1);
+  }
+
+  &:hover {
+    border-color: rgba($red, .6);
+    background: rgba(24, 18, 18, .85);
+
+    img {
+      filter: none;
+      opacity: 1;
+      transform: scale(1.06);
+    }
+  }
+
+  @include mq(tablet) {
+    width: 180px;
+    height: 84px;
+  }
+}
+
+// ---------- слайдер индустрий ----------
+.slider {
+  margin-top: rem(110);
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(20);
+    margin-bottom: rem(26);
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+    @include mono(12);
+    letter-spacing: .32em;
+  }
+
+  &__ctrl {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+  }
+
+  &__count {
+    @include mono(12);
+    color: $muted;
+    font-variant-numeric: tabular-nums;
+
+    span {
+      color: #fff;
+    }
+  }
+
+  &__btn {
+    display: grid;
+    place-items: center;
+    width: rem(52);
+    height: rem(52);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .2);
+    background: rgba(13, 13, 13, .5);
+    transition: background-color .4s, border-color .4s, opacity .4s;
+
+    .icon {
+      width: 40%;
+      height: 40%;
+    }
+
+    &:hover {
+      background: $red;
+      border-color: $red;
+    }
+
+    &:disabled {
+      opacity: .3;
+      pointer-events: none;
+    }
+  }
+
+  &__viewport {
+    overflow: hidden;
+    margin: rem(-20);
+    padding: rem(20);
+  }
+
+  &__track {
+    display: flex;
+    gap: rem(16);
+    touch-action: pan-y;
+    user-select: none;
+    will-change: transform;
+  }
+
+  &__bar {
+    position: relative;
+    height: 1px;
+    margin-top: rem(28);
+    background: $line;
+
+    span {
+      position: absolute;
+      inset: 0;
+      background: $red;
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+    }
+  }
+
+  @include mq(tablet) {
+    margin-top: 70px;
+
+    &__btn { width: 44px; height: 44px; }
+    &__viewport { margin: -16px; padding: 16px; }
+  }
+}
+
+.ind {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  width: calc((100% - #{rem(32)}) / 3);
+  min-height: rem(380);
+  padding: rem(30);
+  border-radius: rem(8);
+  @include glass(.62);
+  @include spotlight;
+
+  &__num {
+    @include mono(12);
+    color: $red;
+  }
+
+  &__title {
+    margin-top: rem(64);
+    font-family: $font-brand;
+    font-size: rem(34);
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  &__text {
+    margin-top: rem(16);
+    font-size: rem(15);
+    line-height: 1.55;
+    color: $muted;
+  }
+
+  &__clients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(6);
+    margin-top: auto;
+    padding-top: rem(26);
+
+    li {
+      padding: rem(6) rem(10);
+      border: 1px solid $line;
+      border-radius: rem(30);
+      @include mono(10);
+      letter-spacing: .1em;
+    }
+  }
+
+  .link {
+    margin-top: rem(18);
+  }
+
+  &--cta {
+    background: $red;
+    border-color: $red;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+
+    .ind__num { color: #fff; }
+    .ind__text { color: rgba(255, 255, 255, .86); }
+
+    .link {
+      margin-top: auto;
+      color: #fff;
+
+      @include pointer {
+        color: $ink;
+
+        &::after { background-color: $ink; }
+      }
+    }
+  }
+
+  @include mq(tablet) {
+    width: calc((100% - 16px) / 2);
+    min-height: 340px;
+    padding: 24px;
+
+    &__title { font-size: 26px; margin-top: 44px; }
+  }
+
+  @include mq(mobile) {
+    width: 86%;
+  }
+}

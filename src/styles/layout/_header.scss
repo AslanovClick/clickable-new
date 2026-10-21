@@ -1,0 +1,246 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 50;
+  transition: transform .8s $ease-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 7, 7, .72);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    opacity: 0;
+    transition: opacity .6s;
+  }
+
+  &.is-scrolled::before {
+    opacity: 1;
+  }
+
+  // над светлой секцией — кремовое стекло и тёмный текст
+  &::before,
+  .nav__link,
+  .burger {
+    transition-property: opacity, background-color, border-color, color;
+    transition-duration: .6s, .5s, .5s, .4s;
+  }
+
+  &.is-light::before {
+    background: rgba(236, 232, 225, .86);
+    border-bottom-color: rgba(13, 13, 13, .08);
+  }
+
+  &.is-light .nav__link {
+    color: rgba(13, 13, 13, .6);
+
+    &:hover,
+    &.is-active {
+      color: $ink;
+    }
+  }
+
+  &.is-light .burger {
+    border-color: rgba(13, 13, 13, .2);
+    background: rgba(236, 232, 225, .6);
+
+    span {
+      background: $ink;
+    }
+  }
+
+  // с запасом — чтобы не выглядывала тень кнопки
+  &.is-hidden {
+    transform: translateY(-150%);
+  }
+
+  &__inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: rem(40);
+    height: rem(92);
+    transition: height .6s $ease-out;
+  }
+
+  &.is-scrolled &__inner {
+    height: rem(74);
+  }
+
+  &__cta {
+    height: rem(44);
+    padding: 0 rem(20);
+    font-size: rem(11);
+  }
+
+  @include mq(tablet) {
+    &__inner,
+    &.is-scrolled .header__inner {
+      height: 64px;
+    }
+
+    &__cta {
+      display: none;
+    }
+  }
+}
+
+.logo {
+  display: block;
+  flex: none;
+  width: rem(142);
+  color: $red;
+  text-decoration: none;
+  transition: filter .5s;
+
+  &__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &:hover {
+    filter: drop-shadow(0 0 rem(12) rgba($red, .6));
+  }
+
+  @include mq(tablet) {
+    width: 120px;
+  }
+}
+
+.nav {
+  position: relative;
+  display: flex;
+  gap: rem(38);
+  margin-left: auto;
+
+  &__link {
+    position: relative;
+    padding: rem(12) 0;
+    @include mono(11.5);
+    letter-spacing: .16em;
+    text-decoration: none;
+    color: rgba(242, 239, 234, .66);
+    transition: color .4s;
+
+    &:hover,
+    &.is-active {
+      color: #fff;
+    }
+  }
+
+  &__indicator {
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    width: 100px;
+    height: 2px;
+    background: $red;
+    box-shadow: 0 0 10px rgba($red, .9);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    pointer-events: none;
+  }
+
+  @include mq(tablet) {
+    display: none;
+  }
+}
+
+.burger {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .2);
+  background: rgba(13, 13, 13, .5);
+
+  span {
+    position: absolute;
+    left: 13px;
+    right: 13px;
+    height: 1.5px;
+    background: #fff;
+    transition: transform .6s $ease-out, top .6s $ease-out, background-color .5s;
+
+    &:nth-child(1) { top: 18px; }
+    &:nth-child(2) { top: 25px; }
+  }
+
+  &.is-open span {
+    &:nth-child(1) { top: 21px; transform: rotate(45deg); }
+    &:nth-child(2) { top: 21px; transform: rotate(-45deg); }
+  }
+
+  @include mq(tablet) {
+    display: block;
+  }
+}
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  padding: 100px 24px 40px;
+  background:
+    radial-gradient(80% 50% at 100% 0%, rgba($red, .22), transparent 70%),
+    rgba(7, 7, 7, .97);
+  visibility: hidden;
+
+  @include mq(tablet) {
+    display: flex;
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__link {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+    font-family: $font-brand;
+    font-size: 34px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  &__num {
+    font-family: $font-mono;
+    font-size: 11px;
+    letter-spacing: .14em;
+    color: $red;
+  }
+
+  &__bottom {
+    display: grid;
+    gap: 8px;
+
+    a {
+      font-family: $font-mono;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-decoration: none;
+      color: rgba(242, 239, 234, .7);
+    }
+  }
+}

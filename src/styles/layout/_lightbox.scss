@@ -1,0 +1,144 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+// просмотрщик кейсов и шоурила
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 5, .94);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  &__frame {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) rem(330);
+    gap: rem(40);
+    align-items: center;
+    width: min(92vw, #{rem(1320)});
+  }
+
+  &__media {
+    position: relative;
+    display: grid;
+    place-items: center;
+    max-height: 84vh;
+    overflow: hidden;
+    border-radius: rem(6);
+    background: #000;
+
+    img,
+    video {
+      display: block;
+      width: 100%;
+      max-height: 84vh;
+      object-fit: contain;
+    }
+  }
+
+  &__num {
+    @include mono(12);
+    color: $red;
+  }
+
+  &__of {
+    margin-left: rem(8);
+    color: $muted;
+  }
+
+  &__title {
+    margin-top: rem(18);
+    font-family: $font-brand;
+    font-size: rem(50);
+    font-weight: 400;
+    line-height: .95;
+    text-transform: uppercase;
+  }
+
+  &__kind {
+    margin-top: rem(14);
+    @include mono(11);
+    color: $muted;
+  }
+
+  &__text {
+    margin-top: rem(22);
+    font-size: rem(16);
+    line-height: 1.6;
+    color: rgba(242, 239, 234, .8);
+  }
+
+  &__nav {
+    display: flex;
+    gap: rem(10);
+    margin-top: rem(34);
+  }
+
+  &__close {
+    position: absolute;
+    right: rem(28);
+    top: rem(24);
+    display: grid;
+    place-items: center;
+    width: rem(56);
+    height: rem(56);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .25);
+    color: #fff;
+    transition: background-color .4s, border-color .4s, transform .6s $ease-out;
+
+    .icon {
+      width: 40%;
+      height: 40%;
+    }
+
+    &:hover {
+      background: $red;
+      border-color: $red;
+      transform: rotate(90deg);
+    }
+  }
+
+  // шоурил — только видео на всю рамку
+  &.is-reel &__frame {
+    grid-template-columns: 1fr;
+    width: min(92vw, 150vh);
+  }
+
+  &.is-reel &__info {
+    display: none;
+  }
+
+  @include mq(tablet) {
+    &__frame {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-height: 90vh;
+      overflow: auto;
+    }
+
+    &__media,
+    &__media img,
+    &__media video {
+      max-height: 56vh;
+    }
+
+    &__title { font-size: 34px; margin-top: 10px; }
+    &__text { font-size: 15px; margin-top: 14px; }
+    &__nav { margin-top: 20px; }
+    &__close { right: 16px; top: 16px; width: 46px; height: 46px; }
+  }
+}

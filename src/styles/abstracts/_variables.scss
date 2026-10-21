@@ -1,0 +1,24 @@
+// фирменные цвета CLICKABLE
+$red: #ff1923;
+$red-deep: #c50009;
+$ink: #0d0d0d;
+$bg: #070707;
+$panel: #111;
+$cream: #ece8e1;
+$cream-2: #e2ddd3;
+$text: #f2efea;
+$grey: #909090;
+$muted: rgba(242, 239, 234, .6);
+$line: rgba(255, 255, 255, .1);
+$line-dark: rgba(13, 13, 13, .14);
+
+$grad: linear-gradient(90deg, #ff1923 0%, #ff4a3d 100%);
+
+// CLICKABLE — фирменный (тяжёлый италик, есть кириллица), Montserrat — текст, JetBrains Mono — подписи
+$font-brand: 'CLICKABLE', 'Montserrat', system-ui, sans-serif;
+$font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+// JetBrains Mono подключает next/font (см. src/app/fonts.ts) — семейство приходит через переменную
+$font-mono: var(--font-mono), ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+$ease-out: cubic-bezier(.16, 1, .3, 1);
+$ease-in-out: cubic-bezier(.65, 0, .35, 1);
